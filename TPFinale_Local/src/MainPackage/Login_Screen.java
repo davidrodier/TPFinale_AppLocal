@@ -4,13 +4,19 @@
  * and open the template in the editor.
  */
 package MainPackage;
-
+import java.sql.Connection;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.sql.*;
+import oracle.jdbc.*;
+import oracle.jdbc.pool.*;
 /**
  *
  * @author 201329288
  */
 public class Login_Screen extends javax.swing.JFrame {
-
+    Connection conn = null;
+    String url = "jdbc:oracle:thin:@205.237.244.251:1521:orcl";
     /**
      * Creates new form Login_Screen
      */
@@ -43,6 +49,11 @@ public class Login_Screen extends javax.swing.JFrame {
         BTN_Cancel.setText("Cancel");
 
         BTN_Login.setText("Login");
+        BTN_Login.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                BTN_LoginActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -85,6 +96,10 @@ public class Login_Screen extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void BTN_LoginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BTN_LoginActionPerformed
+        
+    }//GEN-LAST:event_BTN_LoginActionPerformed
 
     /**
      * @param args the command line arguments
