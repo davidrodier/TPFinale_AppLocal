@@ -3,13 +3,12 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package MainPackage;
+package MainPKG;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.*;
-import oracle.jdbc.*;
-import oracle.jdbc.pool.*;
+import oracle.jdbc.OracleDriver;
 /**
  *
  * @author 201329288
@@ -17,6 +16,7 @@ import oracle.jdbc.pool.*;
 public class Login_Screen extends javax.swing.JFrame {
     Connection conn = null;
     String url = "jdbc:oracle:thin:@205.237.244.251:1521:orcl";
+    ResultSet rst;
     /**
      * Creates new form Login_Screen
      */
@@ -98,7 +98,8 @@ public class Login_Screen extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void BTN_LoginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BTN_LoginActionPerformed
-        
+        new Main_Screen().setVisible(true);
+        this.setVisible(false);
     }//GEN-LAST:event_BTN_LoginActionPerformed
 
     /**
