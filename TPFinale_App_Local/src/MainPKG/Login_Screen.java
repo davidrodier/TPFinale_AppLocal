@@ -16,7 +16,6 @@ import oracle.jdbc.OracleDriver;
 public class Login_Screen extends javax.swing.JFrame {
     Connection conn = null;
     String url = "jdbc:oracle:thin:@205.237.244.251:1521:orcl";
-    ResultSet rst;
     /**
      * Creates new form Login_Screen
      */
@@ -98,8 +97,24 @@ public class Login_Screen extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void BTN_LoginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BTN_LoginActionPerformed
-        new Main_Screen().setVisible(true);
-        this.setVisible(false);
+        try{
+            DriverManager.registerDriver(new oracle.jdbc.driver.OracleDriver());
+            
+            conn = DriverManager.getConnection(url, TXB_Username.getText(), TXB_Password.getText());
+        }
+        catch(SQLException sqex){
+            System.out.println(sqex);
+        }
+        
+        if(conn != null)
+        {
+            new Main_Screen().setVisible(true);
+            this.setVisible(false);
+        }
+        else
+        {
+            System.out.println("Erreur de connexion");
+        }
     }//GEN-LAST:event_BTN_LoginActionPerformed
 
     /**
