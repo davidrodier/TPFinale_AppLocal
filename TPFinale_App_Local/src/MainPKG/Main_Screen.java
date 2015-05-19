@@ -24,13 +24,10 @@ public class Main_Screen extends javax.swing.JFrame {
         initComponents();
         conn = connect;
         jLabel1.setText(username);
-        
-        DefaultListModel dlm = new DefaultListModel();
-        for(int i=0; i<150; i++)
-        {
-            dlm.addElement(i);
-        }
-        LB_Items.setModel(dlm);
+    }
+    
+    public Main_Screen() {
+        initComponents();
     }
 
     /**
@@ -61,10 +58,25 @@ public class Main_Screen extends javax.swing.JFrame {
         jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Gestion des salles", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 1, 11))); // NOI18N
 
         BTN_Salle_Add.setText("Ajouter");
+        BTN_Salle_Add.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                BTN_Salle_AddActionPerformed(evt);
+            }
+        });
 
         BTN_Salle_Remove.setText("Retirer");
+        BTN_Salle_Remove.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                BTN_Salle_RemoveActionPerformed(evt);
+            }
+        });
 
         BTN_Salle_Edit.setText("Modifier");
+        BTN_Salle_Edit.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                BTN_Salle_EditActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -157,19 +169,34 @@ public class Main_Screen extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void BTN_Billet_AddActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BTN_Billet_AddActionPerformed
-        new Add_Modify().setVisible(true);
+        new Add_Modify_Billet(conn, this, "Add").setVisible(true);
         this.setVisible(false);
     }//GEN-LAST:event_BTN_Billet_AddActionPerformed
 
     private void BTN_Billet_RemoveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BTN_Billet_RemoveActionPerformed
-        new Remove().setVisible(true);
+        new Remove(conn, this, "Billet").setVisible(true);
         this.setVisible(false);
     }//GEN-LAST:event_BTN_Billet_RemoveActionPerformed
 
     private void BTN_Billet_EditActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BTN_Billet_EditActionPerformed
-        new Add_Modify().setVisible(true);
+        new Add_Modify_Billet(conn, this, "Modify").setVisible(true);
         this.setVisible(false);
     }//GEN-LAST:event_BTN_Billet_EditActionPerformed
+
+    private void BTN_Salle_AddActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BTN_Salle_AddActionPerformed
+        new Add_Modify_Salle(conn, this, "Add").setVisible(true);
+        this.setVisible(false);
+    }//GEN-LAST:event_BTN_Salle_AddActionPerformed
+
+    private void BTN_Salle_RemoveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BTN_Salle_RemoveActionPerformed
+        new Remove(conn, this, "Salle").setVisible(true);
+        this.setVisible(false);
+    }//GEN-LAST:event_BTN_Salle_RemoveActionPerformed
+
+    private void BTN_Salle_EditActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BTN_Salle_EditActionPerformed
+        new Add_Modify_Salle(conn, this, "Modify").setVisible(true);
+        this.setVisible(false);
+    }//GEN-LAST:event_BTN_Salle_EditActionPerformed
 
     /**
      * @param args the command line arguments

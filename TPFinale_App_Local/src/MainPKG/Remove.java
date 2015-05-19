@@ -4,20 +4,31 @@
  * and open the template in the editor.
  */
 package MainPKG;
-
+import java.sql.Connection;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.sql.*;
+import oracle.jdbc.OracleDriver;
+import javax.swing.DefaultListModel;
 /**
  *
  * @author 201329288
  */
 public class Remove extends javax.swing.JFrame {
 
+    Main_Screen main_Page = null;
+    Connection conn = null;
     /**
      * Creates new form Remove
      */
+    public Remove(Connection main_Conn, Main_Screen main, String title) {
+        initComponents();
+        jLabel1.setText("Remove-" + title);
+        main_Page = main;
+    }
     public Remove() {
         initComponents();
     }
-
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -48,6 +59,11 @@ public class Remove extends javax.swing.JFrame {
         BTN_Remove.setText("Retirer");
 
         BTN_Quitter.setText("Quitter");
+        BTN_Quitter.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                BTN_QuitterActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -57,13 +73,13 @@ public class Remove extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jLabel1)
-                        .addGap(0, 48, Short.MAX_VALUE))
-                    .addComponent(jScrollPane1))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(BTN_Remove, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 67, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(BTN_Quitter, javax.swing.GroupLayout.Alignment.TRAILING))
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(BTN_Remove, javax.swing.GroupLayout.PREFERRED_SIZE, 67, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(BTN_Quitter))
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -83,6 +99,11 @@ public class Remove extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void BTN_QuitterActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BTN_QuitterActionPerformed
+        main_Page.setVisible(true);
+        this.setVisible(false);
+    }//GEN-LAST:event_BTN_QuitterActionPerformed
 
     /**
      * @param args the command line arguments

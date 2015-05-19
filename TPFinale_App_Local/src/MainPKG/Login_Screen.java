@@ -51,6 +51,7 @@ public class Login_Screen extends javax.swing.JFrame {
         jLabel2.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         jLabel2.setText("Username :");
 
+        TXB_Username.setText("Thibodea");
         TXB_Username.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
                 TXB_UsernameKeyPressed(evt);
@@ -66,6 +67,7 @@ public class Login_Screen extends javax.swing.JFrame {
             }
         });
 
+        TXB_Password.setText("ORACLE1");
         TXB_Password.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
                 TXB_PasswordKeyPressed(evt);
