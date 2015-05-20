@@ -25,6 +25,50 @@ public class Remove extends javax.swing.JFrame {
         initComponents();
         jLabel1.setText("Remove-" + title);
         main_Page = main;
+        conn = main_Conn;
+        
+        if(title == "Billet")
+        {
+            try{
+            DefaultListModel dlm = new DefaultListModel();
+            String sql = "SELECT NUMBILLET, SPEC.NOMSPEC, REP.LADATE, SEC.NOMSEC FROM BILLETS B INNER JOIN REPRESENTATIONS REP ON B.NUMREP=REP.NUMREP INNER JOIN SPECTACLES SPEC ON REP.NUMSPEC=SPEC.NUMSPEC INNER JOIN SECTIONS SEC ON B.NUMSEC=SEC.NUMSEC";
+            Statement stm = conn.createStatement();
+            ResultSet rst = stm.executeQuery(sql);
+            
+            while(rst.next())
+            {
+                dlm.addElement("Billet pour " + rst.getString(2) + " pour la représentation de " + rst.getString(3) + " dans la section " + rst.getString(4) + "-" + rst.getInt(1));
+            }
+            
+            stm.close();
+            rst.close();
+            
+            LB_Items.setModel(dlm);
+        }
+        catch(SQLException except){          
+        }
+        }
+        else
+        {
+            try{
+            DefaultListModel dlm = new DefaultListModel();
+            String sql = "SELECT NUMSALLE, NOMSALLE FROM SALLES";
+            Statement stm = conn.createStatement();
+            ResultSet rst = stm.executeQuery(sql);
+            
+            while(rst.next())
+            {
+                dlm.addElement(rst.getString(2) + rst.getInt(1));
+            }
+            
+            stm.close();
+            rst.close();
+            
+            LB_Items.setModel(dlm);
+        }
+        catch(SQLException except){          
+        }
+        }
     }
     public Remove() {
         initComponents();
@@ -57,6 +101,11 @@ public class Remove extends javax.swing.JFrame {
         jLabel1.setText("Retrait");
 
         BTN_Remove.setText("Retirer");
+        BTN_Remove.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                BTN_RemoveActionPerformed(evt);
+            }
+        });
 
         BTN_Quitter.setText("Quitter");
         BTN_Quitter.addActionListener(new java.awt.event.ActionListener() {
@@ -104,6 +153,41 @@ public class Remove extends javax.swing.JFrame {
         main_Page.setVisible(true);
         this.setVisible(false);
     }//GEN-LAST:event_BTN_QuitterActionPerformed
+
+    private void BTN_RemoveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BTN_RemoveActionPerformed
+        if(jLabel1.getText().endsWith("Billet"))
+        {
+            try{
+                CallableStatement Callins = conn.prepareCall("{call AMINAPP.REMOVEBILLET (?)}");
+
+                Callins.setInt(1, Integer.parseInt(LB_Items.getSelectedValue().toString()));
+                
+                Callins.executeUpdate();
+                Callins.clearParameters();
+                Callins.close();
+            }
+            catch(SQLException ins)
+            {
+                System.out.println(ins.getMessage());
+            }
+        }
+        else
+        {
+            try{
+                CallableStatement Callins = conn.prepareCall("{call AMINAPP.REMOVESALLES (?)}");
+
+                Callins.setInt(1, Integer.parseInt(LB_Items.getSelectedValue().toString()));
+                
+                Callins.executeUpdate();
+                Callins.clearParameters();
+                Callins.close();
+            }
+            catch(SQLException ins)
+            {
+                System.out.println(ins.getMessage());
+            }
+        }
+    }//GEN-LAST:event_BTN_RemoveActionPerformed
 
     /**
      * @param args the command line arguments
