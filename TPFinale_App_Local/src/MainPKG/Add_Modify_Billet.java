@@ -24,8 +24,29 @@ public class Add_Modify_Billet extends javax.swing.JFrame {
     public Add_Modify_Billet(Connection main_Conn, Main_Screen main, String template) {
         initComponents();
         main_Page = main;
+        conn = main_Conn;
         
         jLabel1.setText("Billet-" + template);
+        
+        String sql = "SELECT * FROM CATEGORIES";
+        ResultSet rst = null;
+        
+        Statement stm = null;
+        
+        try{
+            stm = conn.createStatement();
+            rst = stm.executeQuery(sql);
+            
+            while(rst.next())
+            {
+                CBX_Catégorie.addItem(rst.getString("NOMCAT") + "-" + rst.getString("NUMCAT"));
+            }
+            
+            stm.close();
+            rst.close();
+        }
+        catch(SQLException except){          
+        }
     }
     public Add_Modify_Billet() {
         initComponents();
@@ -57,6 +78,8 @@ public class Add_Modify_Billet extends javax.swing.JFrame {
         TXB_NomSpectacle = new javax.swing.JTextField();
         jLabel7 = new javax.swing.JLabel();
         CBX_Catégorie = new javax.swing.JComboBox();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        List = new javax.swing.JList();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -71,6 +94,11 @@ public class Add_Modify_Billet extends javax.swing.JFrame {
         });
 
         BTN_Accept.setText("Accepter");
+        BTN_Accept.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                BTN_AcceptActionPerformed(evt);
+            }
+        });
 
         jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Sections", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 1, 11))); // NOI18N
 
@@ -120,7 +148,7 @@ public class Add_Modify_Billet extends javax.swing.JFrame {
                 .addComponent(jLabel4)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(TXB_Date, javax.swing.GroupLayout.PREFERRED_SIZE, 146, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(12, Short.MAX_VALUE))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -134,8 +162,6 @@ public class Add_Modify_Billet extends javax.swing.JFrame {
         jLabel5.setText("Nom :");
 
         jLabel7.setText("Catégorie :");
-
-        CBX_Catégorie.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
@@ -165,6 +191,13 @@ public class Add_Modify_Billet extends javax.swing.JFrame {
                 .addGap(0, 0, Short.MAX_VALUE))
         );
 
+        List.setModel(new javax.swing.AbstractListModel() {
+            String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
+            public int getSize() { return strings.length; }
+            public Object getElementAt(int i) { return strings[i]; }
+        });
+        jScrollPane1.setViewportView(List);
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -177,34 +210,39 @@ public class Add_Modify_Billet extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addGroup(layout.createSequentialGroup()
+                        .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(32, 32, 32)
+                        .addComponent(BTN_Cancel, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(BTN_Accept)
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel1)
                             .addGroup(layout.createSequentialGroup()
-                                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(42, 42, 42)
-                                .addComponent(BTN_Cancel, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(BTN_Accept)))
-                        .addGap(0, 24, Short.MAX_VALUE)))
-                .addContainerGap())
+                                .addComponent(jLabel1)
+                                .addGap(0, 0, Short.MAX_VALUE))
+                            .addComponent(jScrollPane1))
+                        .addContainerGap())))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(BTN_Cancel)
-                        .addComponent(BTN_Accept))
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(jLabel1)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jLabel1)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(BTN_Cancel, javax.swing.GroupLayout.Alignment.TRAILING)))
+                    .addComponent(BTN_Accept, javax.swing.GroupLayout.Alignment.TRAILING))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 154, Short.MAX_VALUE)
+                .addContainerGap())
         );
 
         pack();
@@ -214,6 +252,37 @@ public class Add_Modify_Billet extends javax.swing.JFrame {
         this.setVisible(false);
         main_Page.setVisible(true);
     }//GEN-LAST:event_BTN_CancelActionPerformed
+
+    private void BTN_AcceptActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BTN_AcceptActionPerformed
+                if(jLabel1.getText().endsWith("Add"))
+        {
+            try{
+                CallableStatement Callins = conn.prepareCall("{call AMINAPP.ADDSALLES (?,?)}");
+
+                Callins.executeUpdate();
+                Callins.clearParameters();
+                Callins.close();
+            }
+            catch(SQLException ins)
+            {
+                System.out.println(ins.getMessage());
+            }
+        }
+        else
+        {
+            try{
+                CallableStatement Callins = conn.prepareCall("{call AMINAPP.UPDATESALLES (?,?,?)}");
+
+                Callins.executeUpdate();
+                Callins.clearParameters();
+                Callins.close();
+            }
+            catch(SQLException ins)
+            {
+                System.out.println(ins.getMessage());
+            }
+        }
+    }//GEN-LAST:event_BTN_AcceptActionPerformed
 
     /**
      * @param args the command line arguments
@@ -255,6 +324,7 @@ public class Add_Modify_Billet extends javax.swing.JFrame {
     private javax.swing.JButton BTN_Accept;
     private javax.swing.JButton BTN_Cancel;
     private javax.swing.JComboBox CBX_Catégorie;
+    private javax.swing.JList List;
     private javax.swing.JTextField TXB_Date;
     private javax.swing.JTextField TXB_NbPlace;
     private javax.swing.JTextField TXB_NomSection;
@@ -269,5 +339,6 @@ public class Add_Modify_Billet extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
+    private javax.swing.JScrollPane jScrollPane1;
     // End of variables declaration//GEN-END:variables
 }

@@ -26,6 +26,27 @@ public class Add_Modify_Salle extends javax.swing.JFrame {
         conn = conn_Main;
         jLabel1.setText("Salles-" + template);
         main_Page = main;
+        
+        DefaultListModel dlm = new DefaultListModel();
+        ResultSet rst = null;
+        Statement stm = null;
+        String sql = "SELECT * FROM SALLES";
+        try{
+            stm = conn.createStatement();
+            rst = stm.executeQuery(sql);
+            
+            while(rst.next())
+            {
+                dlm.addElement(rst.getInt("NUMSALLE"));
+            }
+            
+            stm.close();
+            rst.close();
+        }
+        catch(SQLException exp){
+        }
+        
+        List.setModel(dlm);
     }
     public Add_Modify_Salle() {
         initComponents();
@@ -47,6 +68,8 @@ public class Add_Modify_Salle extends javax.swing.JFrame {
         TXB_Nom = new javax.swing.JTextField();
         BTN_Accepter = new javax.swing.JButton();
         BTN_Cancel = new javax.swing.JButton();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        List = new javax.swing.JList();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -71,6 +94,21 @@ public class Add_Modify_Salle extends javax.swing.JFrame {
             }
         });
 
+        List.setModel(new javax.swing.AbstractListModel() {
+            String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
+            public int getSize() { return strings.length; }
+            public Object getElementAt(int i) { return strings[i]; }
+        });
+        List.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                ListMouseClicked(evt);
+            }
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                ListMousePressed(evt);
+            }
+        });
+        jScrollPane1.setViewportView(List);
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -78,20 +116,21 @@ public class Add_Modify_Salle extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel1)
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addComponent(jLabel2)
                             .addComponent(jLabel3))
                         .addGap(18, 18, 18)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                            .addComponent(TXB_Nom, javax.swing.GroupLayout.DEFAULT_SIZE, 106, Short.MAX_VALUE)
-                            .addComponent(TXB_Adresse))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(TXB_Adresse)
+                            .addComponent(TXB_Nom))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(BTN_Accepter, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(BTN_Cancel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                            .addComponent(BTN_Accepter, javax.swing.GroupLayout.DEFAULT_SIZE, 99, Short.MAX_VALUE)
+                            .addComponent(BTN_Cancel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                    .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, 346, Short.MAX_VALUE)
+                    .addComponent(jScrollPane1))
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -108,7 +147,9 @@ public class Add_Modify_Salle extends javax.swing.JFrame {
                     .addComponent(jLabel3)
                     .addComponent(TXB_Nom, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(BTN_Cancel))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jScrollPane1)
+                .addContainerGap())
         );
 
         pack();
@@ -135,6 +176,7 @@ public class Add_Modify_Salle extends javax.swing.JFrame {
         {
             try{
                 CallableStatement Callins = conn.prepareCall("{call AMINAPP.UPDATESALLES (?,?,?)}");
+                Callins.setInt(1, Integer.parseInt(List.getSelectedValue().toString()));
                 Callins.setString(2, TXB_Adresse.getText());
                 Callins.setString(3, TXB_Nom.getText());
 
@@ -153,6 +195,34 @@ public class Add_Modify_Salle extends javax.swing.JFrame {
         main_Page.setVisible(true);
         this.setVisible(false);
     }//GEN-LAST:event_BTN_CancelActionPerformed
+
+    private void ListMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_ListMouseClicked
+        if(jLabel1.getText().endsWith("Modify"))
+        {
+            try{
+                Statement stm = null;
+                ResultSet rst = null;
+                String sql = "SELECT NOMSALLE, ADRESSE FROM SALLES WHERE NUMSALLE=" + List.getSelectedValue().toString();
+
+                stm = conn.createStatement();
+                rst = stm.executeQuery(sql);
+                
+                rst.next();
+                
+                TXB_Adresse.setText(rst.getString("ADRESSE"));
+                TXB_Nom.setText(rst.getString("NOMSALLE"));
+
+                stm.close();
+                rst.close();
+            }
+            catch(SQLException sqe){
+            }
+        }
+    }//GEN-LAST:event_ListMouseClicked
+
+    private void ListMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_ListMousePressed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_ListMousePressed
 
     /**
      * @param args the command line arguments
@@ -192,10 +262,12 @@ public class Add_Modify_Salle extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton BTN_Accepter;
     private javax.swing.JButton BTN_Cancel;
+    private javax.swing.JList List;
     private javax.swing.JTextField TXB_Adresse;
     private javax.swing.JTextField TXB_Nom;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
+    private javax.swing.JScrollPane jScrollPane1;
     // End of variables declaration//GEN-END:variables
 }
