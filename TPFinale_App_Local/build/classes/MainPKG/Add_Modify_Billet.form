@@ -236,7 +236,7 @@
         </Component>
         <Component class="javax.swing.JTextField" name="TXB_Date">
           <Properties>
-            <Property name="text" type="java.lang.String" value="JJ-MMM-AA"/>
+            <Property name="text" type="java.lang.String" value="AAAA-MM-JJ"/>
           </Properties>
         </Component>
         <Container class="javax.swing.JScrollPane" name="jScrollPane2">

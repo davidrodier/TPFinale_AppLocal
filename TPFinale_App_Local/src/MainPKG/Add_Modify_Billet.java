@@ -173,7 +173,7 @@ public class Add_Modify_Billet extends javax.swing.JFrame {
 
         jLabel4.setText("Date :");
 
-        TXB_Date.setText("JJ-MMM-AA");
+        TXB_Date.setText("AAAA-MM-JJ");
 
         jList1.setModel(new javax.swing.AbstractListModel() {
             String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
@@ -390,11 +390,11 @@ public class Add_Modify_Billet extends javax.swing.JFrame {
         if(jLabel1.getText().endsWith("Add"))
         {
             try{
-                CallableStatement Callins = conn.prepareCall("{call AMINAPP.REPRESENTATIONS (?,?,?,?)}");
+                CallableStatement Callins = conn.prepareCall("{call AMINAPP.ADDREPRESENTATIONS (?,?,?,?)}");
 
-                Callins.setString(1, String.valueOf(jList1.getSelectedValue().toString().charAt(jList1.getSelectedValue().toString().length()-1)));
-                Callins.setString(2, "");
-                Callins.setInt(3, CBX_Catégorie.getSelectedItem().toString().charAt(CBX_Catégorie.getSelectedItem().toString().length()-1));
+                Callins.setInt(1, Integer.parseInt(String.valueOf(jList1.getSelectedValue().toString().charAt(jList1.getSelectedValue().toString().length()-1))));
+                Callins.setDate(2, Date.valueOf(TXB_Date.getText()));
+                Callins.setInt(3, Integer.parseInt(String.valueOf(jList1.getSelectedValue().toString().charAt(jList1.getSelectedValue().toString().length()-1))));
                 Callins.setString(4, "O");
                 
                 Callins.executeUpdate();
