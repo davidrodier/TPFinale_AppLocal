@@ -27,48 +27,7 @@ public class Remove extends javax.swing.JFrame {
         main_Page = main;
         conn = main_Conn;
         
-        if(title == "Billet")
-        {
-            try{
-            DefaultListModel dlm = new DefaultListModel();
-            String sql = "SELECT NUMBILLET, SPEC.NOMSPEC, REP.LADATE, SEC.NOMSEC FROM BILLETS B INNER JOIN REPRESENTATIONS REP ON B.NUMREP=REP.NUMREP INNER JOIN SPECTACLES SPEC ON REP.NUMSPEC=SPEC.NUMSPEC INNER JOIN SECTIONS SEC ON B.NUMSEC=SEC.NUMSEC";
-            Statement stm = conn.createStatement();
-            ResultSet rst = stm.executeQuery(sql);
-            
-            while(rst.next())
-            {
-                dlm.addElement("Billet pour " + rst.getString(2) + " pour la représentation de " + rst.getString(3) + " dans la section " + rst.getString(4) + "-" + rst.getInt(1));
-            }
-            
-            stm.close();
-            rst.close();
-            
-            LB_Items.setModel(dlm);
-        }
-        catch(SQLException except){          
-        }
-        }
-        else
-        {
-            try{
-            DefaultListModel dlm = new DefaultListModel();
-            String sql = "SELECT NUMSALLE, NOMSALLE FROM SALLES";
-            Statement stm = conn.createStatement();
-            ResultSet rst = stm.executeQuery(sql);
-            
-            while(rst.next())
-            {
-                dlm.addElement(rst.getString(2) + rst.getInt(1));
-            }
-            
-            stm.close();
-            rst.close();
-            
-            LB_Items.setModel(dlm);
-        }
-        catch(SQLException except){          
-        }
-        }
+        Fill_List();
     }
     public Remove() {
         initComponents();
@@ -154,17 +113,63 @@ public class Remove extends javax.swing.JFrame {
         this.setVisible(false);
     }//GEN-LAST:event_BTN_QuitterActionPerformed
 
+    private void Fill_List()
+    {
+        if(jLabel1.getText().endsWith("Billet"))
+        {
+            try{
+            DefaultListModel dlm = new DefaultListModel();
+            String sql = "SELECT NUMBILLET, SPEC.NOMSPEC, REP.LADATE, SEC.NOMSEC FROM BILLETS B INNER JOIN REPRESENTATIONS REP ON B.NUMREP=REP.NUMREP INNER JOIN SPECTACLES SPEC ON REP.NUMSPEC=SPEC.NUMSPEC INNER JOIN SECTIONS SEC ON B.NUMSEC=SEC.NUMSEC";
+            Statement stm = conn.createStatement();
+            ResultSet rst = stm.executeQuery(sql);
+            
+            while(rst.next())
+            {
+                dlm.addElement("Billet pour " + rst.getString(2) + " pour la représentation de " + rst.getString(3) + " dans la section " + rst.getString(4) + "-" + rst.getInt(1));
+            }
+            
+            stm.close();
+            rst.close();
+            
+            LB_Items.setModel(dlm);
+        }
+        catch(SQLException except){          
+        }
+        }
+        else
+        {
+            try{
+            DefaultListModel dlm = new DefaultListModel();
+            String sql = "SELECT NUMSALLE, NOMSALLE FROM SALLES";
+            Statement stm = conn.createStatement();
+            ResultSet rst = stm.executeQuery(sql);
+            
+            while(rst.next())
+            {
+                dlm.addElement(rst.getString(2) + "-" + rst.getInt(1));
+            }
+            
+            stm.close();
+            rst.close();
+            
+            LB_Items.setModel(dlm);
+        }
+        catch(SQLException except){          
+        }
+        }
+    }
     private void BTN_RemoveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BTN_RemoveActionPerformed
         if(jLabel1.getText().endsWith("Billet"))
         {
             try{
                 CallableStatement Callins = conn.prepareCall("{call AMINAPP.REMOVEBILLET (?)}");
-
-                Callins.setInt(1, Integer.parseInt(LB_Items.getSelectedValue().toString()));
+                
+                Callins.setInt(1, Integer.parseInt(String.valueOf(LB_Items.getSelectedValue().toString().subSequence(LB_Items.getSelectedValue().toString().lastIndexOf("-")+1, LB_Items.getSelectedValue().toString().length()))));
                 
                 Callins.executeUpdate();
                 Callins.clearParameters();
                 Callins.close();
+                Fill_List();
             }
             catch(SQLException ins)
             {
@@ -176,11 +181,12 @@ public class Remove extends javax.swing.JFrame {
             try{
                 CallableStatement Callins = conn.prepareCall("{call AMINAPP.REMOVESALLES (?)}");
 
-                Callins.setInt(1, Integer.parseInt(LB_Items.getSelectedValue().toString()));
+                Callins.setInt(1, Integer.parseInt(String.valueOf(LB_Items.getSelectedValue().toString().subSequence(LB_Items.getSelectedValue().toString().lastIndexOf("-")+1, LB_Items.getSelectedValue().toString().length()))));
                 
                 Callins.executeUpdate();
                 Callins.clearParameters();
                 Callins.close();
+                Fill_List();
             }
             catch(SQLException ins)
             {
