@@ -132,7 +132,6 @@ public class Login_Screen extends javax.swing.JFrame {
         LBL_Error.setText("");
         try{
             DriverManager.registerDriver(new oracle.jdbc.driver.OracleDriver());
-            
             conn = DriverManager.getConnection(url, TXB_Username.getText(), TXB_Password.getText());
         }
         catch(SQLException sqex){
