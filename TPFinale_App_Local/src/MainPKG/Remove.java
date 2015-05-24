@@ -10,6 +10,7 @@ import java.sql.Statement;
 import java.sql.*;
 import oracle.jdbc.OracleDriver;
 import javax.swing.DefaultListModel;
+import oracle.jdbc.OracleTypes;
 /**
  *
  * @author 201329288
@@ -118,19 +119,21 @@ public class Remove extends javax.swing.JFrame {
         if(jLabel1.getText().endsWith("Billet"))
         {
             try{
-            DefaultListModel dlm = new DefaultListModel();
-            String sql = "SELECT NUMBILLET, SPEC.NOMSPEC, REP.LADATE, SEC.NOMSEC FROM BILLETS B INNER JOIN REPRESENTATIONS REP ON B.NUMREP=REP.NUMREP INNER JOIN SPECTACLES SPEC ON REP.NUMSPEC=SPEC.NUMSPEC INNER JOIN SECTIONS SEC ON B.NUMSEC=SEC.NUMSEC";
-            Statement stm = conn.createStatement();
-            ResultSet rst = stm.executeQuery(sql);
+                CallableStatement Callins = conn.prepareCall("{call AMINAPP.SHOWBILLETFULL (?)}");
+                Callins.registerOutParameter(1, OracleTypes.CURSOR);
+                Callins.execute();
+                ResultSet rst = (ResultSet)Callins.getObject(1);
+
+                DefaultListModel dlm = new DefaultListModel();
             
             while(rst.next())
             {
                 dlm.addElement("Billet pour " + rst.getString(2) + " pour la représentation de " + rst.getString(3) + " dans la section " + rst.getString(4) + "-" + rst.getInt(1));
             }
             
-            stm.close();
+            Callins.clearParameters();
+            Callins.close();
             rst.close();
-            
             LB_Items.setModel(dlm);
         }
         catch(SQLException except){          
@@ -140,16 +143,18 @@ public class Remove extends javax.swing.JFrame {
         {
             try{
             DefaultListModel dlm = new DefaultListModel();
-            String sql = "SELECT NUMSALLE, NOMSALLE FROM SALLES";
-            Statement stm = conn.createStatement();
-            ResultSet rst = stm.executeQuery(sql);
+            CallableStatement Callin = conn.prepareCall("{call AMINAPP.SHOWALLSALLES (?)}");
+            Callin.registerOutParameter(1, OracleTypes.CURSOR);
+            Callin.execute();
+            ResultSet rst = (ResultSet)Callin.getObject(1);
             
             while(rst.next())
             {
                 dlm.addElement(rst.getString(2) + "-" + rst.getInt(1));
             }
             
-            stm.close();
+            Callin.clearParameters();
+            Callin.close();
             rst.close();
             
             LB_Items.setModel(dlm);
