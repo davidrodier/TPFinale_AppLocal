@@ -10,6 +10,7 @@ import java.sql.Statement;
 import java.sql.*;
 import oracle.jdbc.OracleDriver;
 import javax.swing.DefaultListModel;
+import oracle.jdbc.OracleTypes;
 /**
  *
  * @author david
@@ -30,17 +31,19 @@ public class Add_Modify_Salle extends javax.swing.JFrame {
         DefaultListModel dlm = new DefaultListModel();
         ResultSet rst = null;
         Statement stm = null;
-        String sql = "SELECT * FROM SALLES";
         try{
-            stm = conn.createStatement();
-            rst = stm.executeQuery(sql);
+            CallableStatement cstm = conn.prepareCall("{call AMINAPP.SHOWSALLES (?)}");
+            cstm.registerOutParameter(1, OracleTypes.CURSOR);
+            cstm.execute();
+            rst = (ResultSet)cstm.getObject(1);
             
             while(rst.next())
             {
                 dlm.addElement(rst.getInt("NUMSALLE"));
             }
             
-            stm.close();
+            cstm.clearParameters();
+            cstm.close();
             rst.close();
         }
         catch(SQLException exp){
@@ -200,20 +203,21 @@ public class Add_Modify_Salle extends javax.swing.JFrame {
         if(jLabel1.getText().endsWith("Modify"))
         {
             try{
-                Statement stm = null;
                 ResultSet rst = null;
-                String sql = "SELECT NOMSALLE, ADRESSE FROM SALLES WHERE NUMSALLE=" + List.getSelectedValue().toString();
-
-                stm = conn.createStatement();
-                rst = stm.executeQuery(sql);
+                CallableStatement cstm = conn.prepareCall("{call AMINAPP.SHOWSALLE (?,?)}");
+                cstm.setInt(1, Integer.parseInt(String.valueOf(List.getSelectedValue().toString().subSequence(List.getSelectedValue().toString().lastIndexOf("-")+1, List.getSelectedValue().toString().length()))));
+                cstm.registerOutParameter(2, OracleTypes.CURSOR);
+                cstm.execute();
+                rst = (ResultSet)cstm.getObject(2);
                 
                 rst.next();
                 
                 TXB_Adresse.setText(rst.getString("ADRESSE"));
                 TXB_Nom.setText(rst.getString("NOMSALLE"));
 
-                stm.close();
                 rst.close();
+                cstm.clearParameters();
+                cstm.close();
             }
             catch(SQLException sqe){
             }
