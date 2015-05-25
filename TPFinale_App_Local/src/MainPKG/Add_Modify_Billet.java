@@ -28,7 +28,12 @@ public class Add_Modify_Billet extends javax.swing.JFrame {
         
         jLabel1.setText("Billet-" + template);
         
-        String sql = "SELECT * FROM CATEGORIES";
+        SetBoxes();
+    }
+    
+    public void SetBoxes()
+    {
+        String sql = "";
         ResultSet rst = null;
         Statement stm = null;
         
@@ -50,25 +55,9 @@ public class Add_Modify_Billet extends javax.swing.JFrame {
             }
             catch(SQLException sqe){
             }
-            try{
-                stm = null;
-                rst = null;
-                sql = "SELECT * FROM SECTIONS";
-                
-                stm = conn.createStatement();
-                rst = stm.executeQuery(sql);
-               
-                CBX_Sec.removeAllItems();
-                while(rst.next())
-                {
-                    CBX_Sec.addItem(rst.getString(4) + "_" + rst.getInt(1));
-                }
-                stm.close();
-                rst.close();
-            }
-            catch(SQLException sqe){
-            }
         try{
+            CBX_Catégorie.removeAllItems();
+            sql = "SELECT * FROM CATEGORIES";
             stm = conn.createStatement();
             rst = stm.executeQuery(sql);
             
@@ -154,6 +143,42 @@ public class Add_Modify_Billet extends javax.swing.JFrame {
         }
         catch(SQLException except){          
         }
+        try{
+                stm = null;
+                rst = null;
+                sql = "SELECT * FROM SALLES";
+                
+                stm = conn.createStatement();
+                rst = stm.executeQuery(sql);
+               
+                CBX_Salle_Billet.removeAllItems();
+                while(rst.next())
+                {
+                    CBX_Salle_Billet.addItem(rst.getString(3) + "-" + rst.getInt(1));
+                }
+                stm.close();
+                rst.close();
+            }
+            catch(SQLException sqe){
+            }
+        try{
+                stm = null;
+                rst = null;
+                sql = "SELECT * FROM SECTIONS WHERE NUMSALLE=" + String.valueOf(CBX_Salle_Billet.getSelectedItem().toString().subSequence(CBX_Salle_Billet.getSelectedItem().toString().lastIndexOf("-")+1, CBX_Salle_Billet.getSelectedItem().toString().length()));
+                
+                stm = conn.createStatement();
+                rst = stm.executeQuery(sql);
+               
+                CBX_Sec.removeAllItems();
+                while(rst.next())
+                {
+                    CBX_Sec.addItem(rst.getString(4) + "-" + rst.getInt(1));
+                }
+                stm.close();
+                rst.close();
+            }
+            catch(SQLException sqe){
+            }
     }
     public Add_Modify_Billet() {
         initComponents();
@@ -209,7 +234,7 @@ public class Add_Modify_Billet extends javax.swing.JFrame {
         TXB_NumBillet = new javax.swing.JTextField();
         jButton2 = new javax.swing.JButton();
         jLabel13 = new javax.swing.JLabel();
-        jComboBox1 = new javax.swing.JComboBox();
+        CBX_Salle_Billet = new javax.swing.JComboBox();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -392,7 +417,7 @@ public class Add_Modify_Billet extends javax.swing.JFrame {
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jPanel2Layout.createSequentialGroup()
                                 .addComponent(jLabel6)
-                                .addGap(0, 74, Short.MAX_VALUE))
+                                .addGap(0, 86, Short.MAX_VALUE))
                             .addComponent(jScrollPane2)))))
         );
         jPanel2Layout.setVerticalGroup(
@@ -473,6 +498,22 @@ public class Add_Modify_Billet extends javax.swing.JFrame {
 
         jLabel13.setText("Salle :");
 
+        CBX_Salle_Billet.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                CBX_Salle_BilletItemStateChanged(evt);
+            }
+        });
+        CBX_Salle_Billet.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                CBX_Salle_BilletMouseClicked(evt);
+            }
+        });
+        CBX_Salle_Billet.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                CBX_Salle_BilletActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
         jPanel5.setLayout(jPanel5Layout);
         jPanel5Layout.setHorizontalGroup(
@@ -489,15 +530,14 @@ public class Add_Modify_Billet extends javax.swing.JFrame {
                             .addComponent(jLabel13))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(jComboBox1, 0, 127, Short.MAX_VALUE)
-                            .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                .addComponent(TXB_NumBillet)
-                                .addComponent(CBX_Rep, 0, 127, Short.MAX_VALUE)))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                            .addComponent(CBX_Salle_Billet, 0, 179, Short.MAX_VALUE)
+                            .addComponent(TXB_NumBillet, javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(CBX_Rep, javax.swing.GroupLayout.Alignment.TRAILING, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addGap(18, 18, 18)
                         .addComponent(jLabel12)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(CBX_Sec, javax.swing.GroupLayout.PREFERRED_SIZE, 127, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 229, Short.MAX_VALUE)))
+                        .addComponent(CBX_Sec, javax.swing.GroupLayout.PREFERRED_SIZE, 167, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 145, Short.MAX_VALUE)))
                 .addContainerGap())
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel5Layout.createSequentialGroup()
                 .addGap(0, 0, Short.MAX_VALUE)
@@ -516,10 +556,10 @@ public class Add_Modify_Billet extends javax.swing.JFrame {
                     .addComponent(CBX_Rep, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel12)
-                    .addComponent(CBX_Sec, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel13)
-                    .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(CBX_Salle_Billet, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(CBX_Sec, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel12))
                 .addGap(18, 18, 18)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 307, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 8, Short.MAX_VALUE)
@@ -572,7 +612,7 @@ public class Add_Modify_Billet extends javax.swing.JFrame {
 
                 Callins.setString(1, TXB_NomSpectacle.getText());
                 Callins.setString(2, "");
-                Callins.setInt(3, Integer.parseInt(String.valueOf(CBX_Catégorie.getSelectedItem().toString().charAt(CBX_Catégorie.getSelectedItem().toString().length()-1))));
+                Callins.setInt(3, Integer.parseInt(String.valueOf(CBX_Catégorie.getSelectedItem().toString().subSequence(CBX_Catégorie.getSelectedItem().toString().lastIndexOf("-")+1, CBX_Catégorie.getSelectedItem().toString().length()))));
                 Callins.setString(4, "O");
                 
                 Callins.executeUpdate();
@@ -584,20 +624,8 @@ public class Add_Modify_Billet extends javax.swing.JFrame {
                 System.out.println(ins.getMessage());
             }
         }
-        else
-        {
-            try{
-                CallableStatement Callins = conn.prepareCall("{call AMINAPP.UPDATESALLES (?,?,?)}");
-
-                Callins.executeUpdate();
-                Callins.clearParameters();
-                Callins.close();
-            }
-            catch(SQLException ins)
-            {
-                System.out.println(ins.getMessage());
-            }
-        }
+        
+        SetBoxes();
     }//GEN-LAST:event_BTN_Accept_SpecActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
@@ -606,9 +634,9 @@ public class Add_Modify_Billet extends javax.swing.JFrame {
             try{
                 CallableStatement Callins = conn.prepareCall("{call AMINAPP.ADDREPRESENTATIONS (?,?,?,?)}");
 
-                Callins.setInt(1, Integer.parseInt(String.valueOf(jList2.getSelectedValue().toString().charAt(jList2.getSelectedValue().toString().length()-1))));
+                Callins.setInt(1, Integer.parseInt(String.valueOf(String.valueOf(jList2.getSelectedValue().toString().subSequence(jList2.getSelectedValue().toString().lastIndexOf("-")+1, jList2.getSelectedValue().toString().length())))));
                 Callins.setDate(2, Date.valueOf(TXB_Date.getText()));
-                Callins.setInt(3, Integer.parseInt(String.valueOf(jList1.getSelectedValue().toString().charAt(jList1.getSelectedValue().toString().length()-1))));
+                Callins.setInt(3, Integer.parseInt(String.valueOf(jList2.getSelectedValue().toString().subSequence(jList2.getSelectedValue().toString().lastIndexOf("-")+1, jList2.getSelectedValue().toString().length()))));
                 Callins.setString(4, "O");
                 
                 Callins.executeUpdate();
@@ -620,29 +648,17 @@ public class Add_Modify_Billet extends javax.swing.JFrame {
                 System.out.println(ins.getMessage());
             }
         }
-        else
-        {
-            try{
-                CallableStatement Callins = conn.prepareCall("{call AMINAPP.UPDATESALLES (?,?,?)}");
-
-                Callins.executeUpdate();
-                Callins.clearParameters();
-                Callins.close();
-            }
-            catch(SQLException ins)
-            {
-                System.out.println(ins.getMessage());
-            }
-        }
+        
+        SetBoxes();
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void BTN_SectionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BTN_SectionActionPerformed
-                if(jLabel1.getText().endsWith("Add"))
+        if(jLabel1.getText().endsWith("Add"))
         {
             try{
                 CallableStatement Callins = conn.prepareCall("{call AMINAPP.ADDSECTIONS (?,?,?)}");
 
-                Callins.setInt(1, Integer.parseInt(String.valueOf(jList3.getSelectedValue().toString().charAt(jList3.getSelectedValue().toString().length()-1))));
+                Callins.setInt(1, Integer.parseInt(String.valueOf(jList3.getSelectedValue().toString().subSequence(jList3.getSelectedValue().toString().lastIndexOf("-")+1, jList3.getSelectedValue().toString().length()))));
                 Callins.setInt(2, Integer.parseInt(TXB_NbPlace.getText()));
                 Callins.setString(3, TXB_NomSection.getText());
                 
@@ -655,20 +671,8 @@ public class Add_Modify_Billet extends javax.swing.JFrame {
                 System.out.println(ins.getMessage());
             }
         }
-        else
-        {
-            try{
-                CallableStatement Callins = conn.prepareCall("{call AMINAPP.UPDATESALLES (?,?,?)}");
-
-                Callins.executeUpdate();
-                Callins.clearParameters();
-                Callins.close();
-            }
-            catch(SQLException ins)
-            {
-                System.out.println(ins.getMessage());
-            }
-        }
+        
+        SetBoxes();
     }//GEN-LAST:event_BTN_SectionActionPerformed
 
     private void ListMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_ListMouseClicked
@@ -680,7 +684,7 @@ public class Add_Modify_Billet extends javax.swing.JFrame {
                 ResultSet rst = null;
                 ResultSet temp = null;
                 String sql = "SELECT * FROM REPRESENTATIONS";
-                String sql2 = "SELECT * FROM BILLETS WHERE NUMBILLET=" + List.getSelectedValue().toString().charAt(List.getSelectedValue().toString().length()-1);
+                String sql2 = "SELECT * FROM BILLETS WHERE NUMBILLET=" + String.valueOf(List.getSelectedValue().toString().subSequence(List.getSelectedValue().toString().lastIndexOf("-")+1, List.getSelectedValue().toString().length()));
                 
                 stm = conn.createStatement();
                 rst = stm.executeQuery(sql);
@@ -698,7 +702,7 @@ public class Add_Modify_Billet extends javax.swing.JFrame {
                     }
                     j++;
                 }
-
+                TXB_NumBillet.setText(String.valueOf(temp.getInt(1)));
                 CBX_Rep.setSelectedIndex(i);
                 stm.close();
                 rst.close();
@@ -707,13 +711,46 @@ public class Add_Modify_Billet extends javax.swing.JFrame {
             }
             catch(SQLException sqe){
             }
-                        try{
+            try{
                 Statement stm = null;
                 Statement tempstm = null;
                 ResultSet rst = null;
                 ResultSet temp = null;
-                String sql = "SELECT * FROM SECTIONS";
-                String sql2 = "SELECT * FROM BILLETS WHERE NUMBILLET=" + List.getSelectedValue().toString().charAt(List.getSelectedValue().toString().length()-1);
+                String sql = "SELECT * FROM SALLES";
+                String sql2 = "SELECT * FROM SALLES WHERE NUMSALLE=(SELECT NUMSALLE FROM SECTIONS WHERE NUMSEC=(SELECT NUMSEC FROM BILLETS WHERE NUMBILLET=" + String.valueOf(List.getSelectedValue().toString().subSequence(List.getSelectedValue().toString().lastIndexOf("-")+1, List.getSelectedValue().toString().length())) + "))";
+                
+                stm = conn.createStatement();
+                rst = stm.executeQuery(sql);
+                tempstm = conn.createStatement();
+                temp = tempstm.executeQuery(sql2);
+               
+                temp.next();
+                int i = 0;
+                int j = 0;
+                while(rst.next())
+                {
+                    if(temp.getInt(1) == rst.getInt(1))
+                    {
+                        i=j;
+                    }
+                    j++;
+                }
+
+                CBX_Salle_Billet.setSelectedIndex(i);
+                stm.close();
+                rst.close();
+                temp.close();
+                tempstm.close();
+            }
+            catch(SQLException sqe){
+            }
+            try{
+                Statement stm = null;
+                Statement tempstm = null;
+                ResultSet rst = null;
+                ResultSet temp = null;
+                String sql = "SELECT * FROM SECTIONS WHERE NUMSALLE=" + String.valueOf(CBX_Salle_Billet.getSelectedItem().toString().subSequence(CBX_Salle_Billet.getSelectedItem().toString().lastIndexOf("-")+1, CBX_Salle_Billet.getSelectedItem().toString().length()));
+                String sql2 = "SELECT * FROM BILLETS WHERE NUMBILLET=" + String.valueOf(List.getSelectedValue().toString().subSequence(List.getSelectedValue().toString().lastIndexOf("-")+1, List.getSelectedValue().toString().length()));
                 
                 stm = conn.createStatement();
                 rst = stm.executeQuery(sql);
@@ -739,8 +776,8 @@ public class Add_Modify_Billet extends javax.swing.JFrame {
                 tempstm.close();
             }
             catch(SQLException sqe){
-            }
-            }
+            }                               
+        }
     }//GEN-LAST:event_ListMouseClicked
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
@@ -749,10 +786,9 @@ public class Add_Modify_Billet extends javax.swing.JFrame {
             try
             {
                 CallableStatement Callins = conn.prepareCall("{call AMINAPP.UPDATEBILLET (?,?,?)}");
-                Callins.setInt(1, Integer.parseInt(String.valueOf(List.getSelectedValue().toString().charAt(List.getSelectedValue().toString().length()-1))));
-                Callins.setInt(2, Integer.parseInt(String.valueOf(CBX_Rep.getSelectedItem().toString().charAt(CBX_Rep.getSelectedItem().toString().length()-1))));
-                Callins.setInt(3, Integer.parseInt(String.valueOf(CBX_Sec.getSelectedItem().toString().charAt(CBX_Sec.getSelectedItem().toString().length()-1))));
-
+                Callins.setInt(1, Integer.parseInt(String.valueOf(List.getSelectedValue().toString().subSequence(List.getSelectedValue().toString().lastIndexOf("-")+1, List.getSelectedValue().toString().length()))));
+                Callins.setInt(2, Integer.parseInt(String.valueOf(CBX_Rep.getSelectedItem().toString().subSequence(CBX_Rep.getSelectedItem().toString().lastIndexOf("_")+1, CBX_Rep.getSelectedItem().toString().length()))));
+                Callins.setInt(3, Integer.parseInt(String.valueOf(CBX_Sec.getSelectedItem().toString().subSequence(CBX_Sec.getSelectedItem().toString().lastIndexOf("-")+1, CBX_Sec.getSelectedItem().toString().length()))));
                 Callins.executeUpdate();
                 Callins.clearParameters();
                 Callins.close();
@@ -767,8 +803,8 @@ public class Add_Modify_Billet extends javax.swing.JFrame {
             try
             {
                 CallableStatement Callins = conn.prepareCall("{call AMINAPP.ADDBILLET (?,?)}");
-                Callins.setInt(1, Integer.parseInt(String.valueOf(CBX_Rep.getSelectedItem().toString().charAt(CBX_Rep.getSelectedItem().toString().length()-1))));
-                Callins.setInt(2, Integer.parseInt(String.valueOf(CBX_Sec.getSelectedItem().toString().charAt(CBX_Sec.getSelectedItem().toString().length()-1))));
+                Callins.setInt(1, Integer.parseInt(String.valueOf(CBX_Rep.getSelectedItem().toString().subSequence(CBX_Rep.getSelectedItem().toString().lastIndexOf("_")+1, CBX_Rep.getSelectedItem().toString().length()))));
+                Callins.setInt(2, Integer.parseInt(String.valueOf(CBX_Sec.getSelectedItem().toString().subSequence(CBX_Sec.getSelectedItem().toString().lastIndexOf("-")+1, CBX_Sec.getSelectedItem().toString().length()))));
 
                 Callins.executeUpdate();
                 Callins.clearParameters();
@@ -779,8 +815,42 @@ public class Add_Modify_Billet extends javax.swing.JFrame {
                 System.out.println(ins.getMessage());
             } 
         }
-                
+           
+        SetBoxes();
     }//GEN-LAST:event_jButton2ActionPerformed
+
+    private void CBX_Salle_BilletActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CBX_Salle_BilletActionPerformed
+        
+    }//GEN-LAST:event_CBX_Salle_BilletActionPerformed
+
+    private void CBX_Salle_BilletMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_CBX_Salle_BilletMouseClicked
+        
+    }//GEN-LAST:event_CBX_Salle_BilletMouseClicked
+
+    private void CBX_Salle_BilletItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_CBX_Salle_BilletItemStateChanged
+        if(CBX_Salle_Billet.getItemCount() > 0)  
+        {
+            CBX_Sec.removeAllItems();
+            try{
+                Statement stm = null;
+                ResultSet rst = null;
+                String sql = "SELECT * FROM SECTIONS WHERE NUMSALLE=" + String.valueOf(CBX_Salle_Billet.getSelectedItem().toString().subSequence(CBX_Salle_Billet.getSelectedItem().toString().lastIndexOf("-")+1, CBX_Salle_Billet.getSelectedItem().toString().length()));
+                
+                stm = conn.createStatement();
+                rst = stm.executeQuery(sql);
+                
+                while(rst.next())
+                {
+                    CBX_Sec.addItem(rst.getString(4) + "-" + rst.getInt(1));
+                }
+
+                stm.close();
+                rst.close();
+            }
+            catch(SQLException sqe){
+            }   
+        }
+    }//GEN-LAST:event_CBX_Salle_BilletItemStateChanged
 
     /**
      * @param args the command line arguments
@@ -824,6 +894,7 @@ public class Add_Modify_Billet extends javax.swing.JFrame {
     private javax.swing.JButton BTN_Section;
     private javax.swing.JComboBox CBX_Catégorie;
     private javax.swing.JComboBox CBX_Rep;
+    private javax.swing.JComboBox CBX_Salle_Billet;
     private javax.swing.JComboBox CBX_Sec;
     private javax.swing.JList List;
     private javax.swing.JTextField TXB_Date;
@@ -833,7 +904,6 @@ public class Add_Modify_Billet extends javax.swing.JFrame {
     private javax.swing.JTextField TXB_NumBillet;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
-    private javax.swing.JComboBox jComboBox1;
     private javax.swing.JFileChooser jFileChooser1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;

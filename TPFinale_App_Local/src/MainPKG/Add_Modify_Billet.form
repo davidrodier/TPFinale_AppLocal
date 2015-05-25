@@ -363,7 +363,7 @@
                                   <Group type="103" groupAlignment="0" attributes="0">
                                       <Group type="102" attributes="0">
                                           <Component id="jLabel6" min="-2" max="-2" attributes="0"/>
-                                          <EmptySpace min="0" pref="74" max="32767" attributes="0"/>
+                                          <EmptySpace min="0" pref="86" max="32767" attributes="0"/>
                                       </Group>
                                       <Component id="jScrollPane2" max="32767" attributes="0"/>
                                   </Group>
@@ -502,17 +502,15 @@
                               </Group>
                               <EmptySpace max="-2" attributes="0"/>
                               <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                                  <Component id="jComboBox1" pref="127" max="32767" attributes="0"/>
-                                  <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                                      <Component id="TXB_NumBillet" max="32767" attributes="0"/>
-                                      <Component id="CBX_Rep" pref="127" max="32767" attributes="0"/>
-                                  </Group>
+                                  <Component id="CBX_Salle_Billet" pref="179" max="32767" attributes="0"/>
+                                  <Component id="TXB_NumBillet" alignment="1" max="32767" attributes="0"/>
+                                  <Component id="CBX_Rep" alignment="1" max="32767" attributes="0"/>
                               </Group>
-                              <EmptySpace max="-2" attributes="0"/>
+                              <EmptySpace type="separate" max="-2" attributes="0"/>
                               <Component id="jLabel12" min="-2" max="-2" attributes="0"/>
                               <EmptySpace max="-2" attributes="0"/>
-                              <Component id="CBX_Sec" min="-2" pref="127" max="-2" attributes="0"/>
-                              <EmptySpace min="0" pref="229" max="32767" attributes="0"/>
+                              <Component id="CBX_Sec" min="-2" pref="167" max="-2" attributes="0"/>
+                              <EmptySpace pref="145" max="32767" attributes="0"/>
                           </Group>
                       </Group>
                       <EmptySpace max="-2" attributes="0"/>
@@ -538,10 +536,10 @@
                       </Group>
                       <EmptySpace type="separate" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="3" attributes="0">
-                          <Component id="jLabel12" alignment="3" min="-2" max="-2" attributes="0"/>
-                          <Component id="CBX_Sec" alignment="3" min="-2" max="-2" attributes="0"/>
                           <Component id="jLabel13" alignment="3" min="-2" max="-2" attributes="0"/>
-                          <Component id="jComboBox1" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="CBX_Salle_Billet" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="CBX_Sec" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="jLabel12" alignment="3" min="-2" max="-2" attributes="0"/>
                       </Group>
                       <EmptySpace type="separate" max="-2" attributes="0"/>
                       <Component id="jScrollPane1" min="-2" pref="307" max="-2" attributes="0"/>
@@ -624,12 +622,17 @@
                 <Property name="text" type="java.lang.String" value="Salle :"/>
               </Properties>
             </Component>
-            <Component class="javax.swing.JComboBox" name="jComboBox1">
+            <Component class="javax.swing.JComboBox" name="CBX_Salle_Billet">
               <Properties>
                 <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
                   <StringArray count="0"/>
                 </Property>
               </Properties>
+              <Events>
+                <EventHandler event="itemStateChanged" listener="java.awt.event.ItemListener" parameters="java.awt.event.ItemEvent" handler="CBX_Salle_BilletItemStateChanged"/>
+                <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="CBX_Salle_BilletMouseClicked"/>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="CBX_Salle_BilletActionPerformed"/>
+              </Events>
             </Component>
           </SubComponents>
         </Container>
