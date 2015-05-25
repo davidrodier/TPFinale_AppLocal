@@ -27,7 +27,10 @@ public class Add_Modify_Salle extends javax.swing.JFrame {
         conn = conn_Main;
         jLabel1.setText("Salles-" + template);
         main_Page = main;
-        
+        Set_List();
+    }
+    public void Set_List()
+    {
         DefaultListModel dlm = new DefaultListModel();
         ResultSet rst = null;
         Statement stm = null;
@@ -192,6 +195,8 @@ public class Add_Modify_Salle extends javax.swing.JFrame {
                 System.out.println(ins.getMessage());
             }
         }
+        
+        Set_List();
     }//GEN-LAST:event_BTN_AccepterActionPerformed
 
     private void BTN_CancelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BTN_CancelActionPerformed
